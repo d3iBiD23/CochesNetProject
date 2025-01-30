@@ -9,8 +9,9 @@
     <ImageView
         android:id="@+id/fotoCoche"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Imagen del coche"/>
 
     <TextView
         android:id="@+id/marca"
@@ -22,5 +23,7 @@
         android:id="@+id/precio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PRECIO VEHICULO" />
+        android:text="PRECIO VEHICULO"
+        android:layout_marginBottom="20dp"
+        />
 </LinearLayout>

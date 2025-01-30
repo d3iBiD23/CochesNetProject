@@ -1,41 +1,34 @@
 package com.example.cochesnetproject.ui.home;
 
-import java.util.ArrayList;
+import android.app.Application;
+
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ElementosRepositorio {
-    private final List<ElementoCoche> elementos = new ArrayList<>();
+    private final ElementoCocheDao cocheDao;
+    private final LiveData<List<ElementoCoche>> coches;
+    private final ExecutorService executorService;
 
-    public ElementosRepositorio() {
-        // Datos de ejemplo
-        elementos.add(new ElementoCoche("Toyota", "Corolla"));
-        elementos.add(new ElementoCoche("Honda", "Civic"));
-        elementos.add(new ElementoCoche("Ford", "Focus"));
+    public ElementosRepositorio(Application application) {
+        ElementoCocheDatabase db = ElementoCocheDatabase.getInstance(application);
+        cocheDao = db.cocheDao();
+        coches = cocheDao.obtenerTodos();
+        executorService = Executors.newSingleThreadExecutor();
     }
 
-    public List<ElementoCoche> obtener() {
-        return new ArrayList<>(elementos);
+    public LiveData<List<ElementoCoche>> obtener() {
+        return coches;
     }
 
-    public interface Callback {
-        void cuandoFinalice(List<ElementoCoche> elementos);
+    public void insertar(ElementoCoche coche) {
+        executorService.execute(() -> cocheDao.insertar(coche));
     }
 
-    public void insertar(ElementoCoche elemento, Callback callback) {
-        elementos.add(elemento);
-        callback.cuandoFinalice(obtener());
-    }
-
-    public void eliminar(ElementoCoche elemento, Callback callback) {
-        elementos.remove(elemento);
-        callback.cuandoFinalice(obtener());
-    }
-
-    public void actualizar(ElementoCoche elemento, float precio, Callback callback) {
-        int index = elementos.indexOf(elemento);
-        if (index != -1) {
-            elementos.get(index).precio = precio;
-        }
-        callback.cuandoFinalice(obtener());
+    public void eliminar(ElementoCoche coche) {
+        executorService.execute(() -> cocheDao.eliminar(coche));
     }
 }
