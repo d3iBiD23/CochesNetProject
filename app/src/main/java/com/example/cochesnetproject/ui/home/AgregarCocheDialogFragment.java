@@ -56,9 +56,12 @@ public class AgregarCocheDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Añadir Coche")
                 .setView(view)
-                .setPositiveButton("Agregar", (dialog, which) -> agregarCoche())
+                .setPositiveButton("Agregar", (dialog, which) -> {
+                    agregarCoche();  // Asegurar que la función de agregar se llame correctamente
+                })
                 .setNegativeButton("Cancelar", null)
                 .create();
+
     }
 
     private void seleccionarImagen() {
@@ -94,8 +97,6 @@ public class AgregarCocheDialogFragment extends DialogFragment {
             if (listener != null) {
                 listener.onCocheAgregado(nuevoCoche);
             }
-
-            Toast.makeText(getContext(), "Coche añadido", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "Todos los campos y la imagen son obligatorios", Toast.LENGTH_SHORT).show();
         }

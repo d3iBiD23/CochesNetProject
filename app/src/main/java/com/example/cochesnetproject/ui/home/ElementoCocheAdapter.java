@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cochesnetproject.R;
@@ -46,11 +47,12 @@ public class ElementoCocheAdapter extends RecyclerView.Adapter<ElementoCocheAdap
     public int getItemCount() {
         return elementosCoche != null ? elementosCoche.size() : 0;
     }
-
     public void actualizarDatos(List<ElementoCoche> nuevosElementos) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new CocheDiffCallback(this.elementosCoche, nuevosElementos));
         this.elementosCoche = nuevosElementos;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
+
 
     public void eliminarElemento(int position) {
         listener.onItemSwiped(elementosCoche.get(position));
